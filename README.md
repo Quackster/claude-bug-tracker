@@ -10,6 +10,11 @@ A slash command plugin for [Claude Code](https://docs.anthropic.com/en/docs/clau
 4. If context compacts, hooks re-inject `BUGS.md` so Claude picks up where it left off
 5. Once fixed, Claude marks it `FIXED` and stops
 
+## Prerequisites
+
+- [jq](https://jqlang.github.io/jq/) — `brew install jq` / `apt install jq` / `winget install jqlang.jq`
+- Git Bash (Windows only — included with [Git for Windows](https://gitforwindows.org/))
+
 ## Install
 
 ### Global install (recommended — works in all projects)
@@ -46,7 +51,8 @@ bash <(curl -s https://raw.githubusercontent.com/Quackster/claude-bug-tracker/ma
 
 1. Copies the `/bug-track` slash command to `~/.claude/commands/` (global) or `.claude/commands/` (project)
 2. Creates `BUGS.md` in your project root (skips if exists)
-3. Merges a `Stop` hook into `.claude/settings.json` for context survival across compactions
+3. Installs `.claude/hooks/stop-hook.sh` (+ `.cmd` wrapper for Windows)
+4. Merges a `Stop` hook into `.claude/settings.json` for context survival across compactions
 
 The installer is idempotent — running it twice won't duplicate anything.
 
@@ -68,11 +74,13 @@ Claude will automatically:
 If you prefer not to use the install script:
 
 1. Copy `.claude/commands/bug-track.md` to `~/.claude/commands/bug-track.md` (global) or your project's `.claude/commands/` (project-only)
-2. Create an empty `BUGS.md` in your project root
-3. Optionally add the hooks from `.claude/settings.json` to your project for compaction survival
+2. Copy `.claude/hooks/` directory into your project's `.claude/hooks/`
+3. Create an empty `BUGS.md` in your project root
+4. Add the Stop hook from `.claude/settings.json` to your project's settings
 
 ## Uninstall
 
 1. Delete `~/.claude/commands/bug-track.md` (or `.claude/commands/bug-track.md` for project install)
-2. Remove the bug tracker hooks from `.claude/settings.json` (the ones with `ACTIVE BUG` in the command)
-3. Delete `BUGS.md` if desired
+2. Delete `.claude/hooks/stop-hook.sh` and `.claude/hooks/stop-hook.cmd`
+3. Remove the bug tracker hook from `.claude/settings.json` (the one referencing `stop-hook`)
+4. Delete `BUGS.md` if desired

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c \"if [ -f BUGS.md ] && grep -q 'Status: ACTIVE' BUGS.md; then echo '--- ACTIVE BUG CONTEXT (from BUGS.md) ---'; cat BUGS.md; echo '--- END BUGS.md ---'; fi\""
+            "command": "bash .claude/hooks/stop-hook.sh"
           }
         ]
       }
