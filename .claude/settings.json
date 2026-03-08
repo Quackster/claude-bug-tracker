@@ -10,17 +10,6 @@
           }
         ]
       }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c \"if [ -f BUGS.md ] && grep -q 'Status: ACTIVE' BUGS.md; then echo '--- ACTIVE BUG (resume investigation) ---'; cat BUGS.md; echo '--- END BUGS.md ---'; fi\""
-          }
-        ]
-      }
     ]
   }
 }

@@ -1,71 +1,78 @@
 # Claude Code Bug Tracker Plugin
 
-A plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that gives Claude persistent bug tracking across compactions.
+A slash command plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that gives Claude persistent bug tracking across compactions.
 
 ## How it works
 
-1. Add `NEW BUG` anywhere in your code (comment, string, etc.)
-2. Claude detects it and creates a `BUGS.md` entry with `Status: ACTIVE`
-3. As Claude investigates, it updates `BUGS.md` with findings
+1. Run `/bug-track "description"` in your Claude Code prompt
+2. Claude logs the bug in `BUGS.md` with `Status: ACTIVE` and starts investigating
+3. As Claude works, it keeps `BUGS.md` updated with findings
 4. If context compacts, hooks re-inject `BUGS.md` so Claude picks up where it left off
-5. Once fixed, Claude marks it `FIXED` and removes the `NEW BUG` marker
+5. Once fixed, Claude marks it `FIXED` and stops
 
 ## Install
 
-Run one line from your project root. The installer automatically merges hooks into your existing `.claude/settings.json` without overwriting anything.
+### Global install (recommended — works in all projects)
 
-### macOS / Linux
+**macOS / Linux / WSL:**
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/YOUR_USER/claude-bug-tracker/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/Quackster/claude-bug-tracker/master/install.sh)
 ```
 
-### Windows (PowerShell)
+**Windows (PowerShell):**
 
 ```powershell
-irm https://raw.githubusercontent.com/YOUR_USER/claude-bug-tracker/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Quackster/claude-bug-tracker/master/install.ps1 | iex
 ```
 
-### Windows (Git Bash / WSL)
+### Project-only install
+
+If you only want it in a single project:
+
+**macOS / Linux / WSL:**
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/YOUR_USER/claude-bug-tracker/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/Quackster/claude-bug-tracker/master/install.sh) --project
+```
+
+**Windows (PowerShell):**
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/Quackster/claude-bug-tracker/master/install.ps1))) -Project
 ```
 
 ## What the installer does
 
-1. Creates `BUGS.md` in your project root (skips if exists)
-2. Appends bug tracker instructions to your `CLAUDE.md` (skips if already present)
-3. Merges `Stop` and `SessionStart` hooks into `.claude/settings.json` (uses `jq`, falls back to `python3`/`python`)
+1. Copies the `/bug-track` slash command to `~/.claude/commands/` (global) or `.claude/commands/` (project)
+2. Creates `BUGS.md` in your project root (skips if exists)
+3. Merges a `Stop` hook into `.claude/settings.json` for context survival across compactions
 
 The installer is idempotent — running it twice won't duplicate anything.
 
-## Files
-
-| File | Committed | Purpose |
-|------|-----------|---------|
-| `CLAUDE.md` | Yes | Instructions telling Claude how to track bugs |
-| `BUGS.md` | Yes | Persistent bug state file (updated by Claude) |
-| `.claude/settings.json` | Yes | Hooks for post-compaction context restoration |
-| `install.sh` | Yes | One-line installer for macOS/Linux/WSL |
-| `install.ps1` | Yes | One-line installer for Windows PowerShell |
-
 ## Usage
 
-Just add a comment like this anywhere in your code:
-
-```python
-# NEW BUG: the login form crashes when email contains a +
+```
+/bug-track "the login form crashes when email contains a +"
 ```
 
 Claude will automatically:
 - Log the bug in `BUGS.md` with status `ACTIVE`
-- Keep updating findings as it investigates
-- Survive compactions via the `Stop` and `SessionStart` hooks
-- Mark `FIXED` when resolved and remove the `NEW BUG` marker
+- Begin investigating immediately
+- Keep updating findings as it works
+- Survive compactions via hooks
+- Mark `FIXED` when resolved
+
+## Manual install
+
+If you prefer not to use the install script:
+
+1. Copy `.claude/commands/bug-track.md` to `~/.claude/commands/bug-track.md` (global) or your project's `.claude/commands/` (project-only)
+2. Create an empty `BUGS.md` in your project root
+3. Optionally add the hooks from `.claude/settings.json` to your project for compaction survival
 
 ## Uninstall
 
-1. Remove the `# --- Claude Bug Tracker ---` section from your `CLAUDE.md`
+1. Delete `~/.claude/commands/bug-track.md` (or `.claude/commands/bug-track.md` for project install)
 2. Remove the bug tracker hooks from `.claude/settings.json` (the ones with `ACTIVE BUG` in the command)
-3. Delete `BUGS.md`
+3. Delete `BUGS.md` if desired
