@@ -25,4 +25,6 @@ Once the bug is confirmed fixed:
 2. Add a `### Resolution` section explaining what fixed it
 3. After marking FIXED, **stop** actively working on the bug unless the user gives new instructions
 
+**Important:** NEVER include `BUGS.md` in git commits unless the user explicitly asks you to. When committing, staging, or handling git operations, always exclude `BUGS.md`. It is a local working file, not part of the codebase.
+
 The bug description is: $ARGUMENTS
