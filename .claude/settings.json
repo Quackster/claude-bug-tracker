@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c \"if [ -f BUGS.md ] && grep -q 'Status: ACTIVE' BUGS.md; then echo '--- ACTIVE BUG CONTEXT (from BUGS.md) ---'; cat BUGS.md; echo '--- END BUGS.md ---'; fi\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c \"if [ -f BUGS.md ] && grep -q 'Status: ACTIVE' BUGS.md; then echo '--- ACTIVE BUG (resume investigation) ---'; cat BUGS.md; echo '--- END BUGS.md ---'; fi\""
+          }
+        ]
+      }
+    ]
+  }
+}
