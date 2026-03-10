@@ -50,6 +50,8 @@ Read `BUGS.md` in the project root. Add or **overwrite** the bug entry using thi
 Omit the `### Watchlist` section if `--no-watchlist` was passed.
 Add `### Branch` with the branch name if `--branch` was passed.
 
+**Context enrichment:** After reading BUGS.md, check if you already have useful context from the current conversation that isn't captured there yet — e.g., error messages the user shared, files you've already explored, environment details, hypotheses discussed, or anything else that would help a future session (or yourself after compaction) pick up where you left off. Add any such information to the relevant sections of BUGS.md before moving on.
+
 ## Step 3: Reproduce
 
 Before diving into code, **try to reproduce the bug first**. Actually run the relevant code, trigger the described behavior, and confirm the bug exists. Document what you did and what happened in the `### Reproduction` section. This is critical — don't skip it.
