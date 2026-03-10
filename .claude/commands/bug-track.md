@@ -14,6 +14,56 @@ Examples:
 
 ---
 
+## Step 0: Project setup
+
+Before doing anything else, ensure the current project has the bug tracker infrastructure. Check for and create the following if they don't already exist:
+
+1. **`.claude/` directory** — create it if missing
+2. **`.claude/hooks/` directory** — create it if missing
+3. **`.claude/hooks/stop-hook.sh`** — create with this content:
+   ```bash
+   #!/usr/bin/env bash
+   # Claude Bug Tracker - Stop hook
+   # Re-injects BUGS.md context after compaction if a bug is active
+
+   if [ -f BUGS.md ] && grep -q 'Status: ACTIVE' BUGS.md; then
+     echo '--- ACTIVE BUG ---'
+     echo 'Resume investigating the bug below. Keep updating BUGS.md with findings as you work.'
+     echo 'IMPORTANT: NEVER include BUGS.md in git commits unless explicitly asked.'
+     echo ''
+     cat BUGS.md
+     echo '--- END BUGS.md ---'
+   fi
+   ```
+4. **`.claude/hooks/stop-hook.cmd`** — create with this content (Windows wrapper):
+   ```cmd
+   @echo off
+   REM Wrapper to run bash script on Windows
+   "C:\Program Files\Git\bin\bash.exe" "%~dp0stop-hook.sh"
+   ```
+5. **`.claude/settings.json`** — if missing, create it with the Stop hook configured. If it already exists, read it and **merge** the Stop hook entry into the existing hooks (don't overwrite other settings):
+   ```json
+   {
+     "hooks": {
+       "Stop": [
+         {
+           "matcher": "",
+           "hooks": [
+             {
+               "type": "command",
+               "command": "bash .claude/hooks/stop-hook.sh"
+             }
+           ]
+         }
+       ]
+     }
+   }
+   ```
+
+Skip any files that already exist with the correct content. After setup, briefly note what was created (if anything) before continuing.
+
+---
+
 ## Step 1: Branch (only if `--branch`)
 
 If the `--branch` flag is present:
