@@ -65,6 +65,8 @@ This ensures future Claude sessions (after compaction) have full context.
 
 **Repeated rediscovery rule:** If you find yourself looking up, re-deriving, or re-confirming the same piece of information more than once during investigation (e.g., a config value, an API behavior, a file's role, a non-obvious code path), write it into `### Findings` in BUGS.md immediately. Information that had to be discovered twice will have to be discovered again after compaction — BUGS.md survives compaction, your memory does not. When in doubt, write it down.
 
+**Workarounds rule:** If you discover alternative ways to test, verify, or reproduce something (e.g., a manual CLI command that triggers the same code path, a way to mock a dependency, a debug flag that exposes state, a curl request that simulates a UI action), document it in `### Findings` immediately. Include the exact command or steps so they can be reused. These testing workarounds are hard-won knowledge that is easily lost to compaction. Future sessions must not waste time re-figuring out how to test the same thing.
+
 ## Step 5: Mark fixed
 
 Once the bug is confirmed fixed:
