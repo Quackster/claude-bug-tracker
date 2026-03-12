@@ -92,6 +92,11 @@ Read `BUGS.md` in the project root. Add or **overwrite** the bug entry using thi
 ### Findings
 <Key discoveries, root cause analysis, what you've tried>
 
+### Hypotheses
+| # | Hypothesis | Status | Result |
+|---|-----------|--------|--------|
+| 1 | <what you think might be causing the bug> | TESTING / CONFIRMED / REJECTED | <what you found> |
+
 ### Files Involved
 <List of relevant files>
 
@@ -116,6 +121,8 @@ Begin investigating. As you work, **keep updating `BUGS.md`**:
 - If watchlist is enabled: every time you **edit a file** as part of the fix, add its path to `### Watchlist` (no duplicates). This helps future sessions detect potential regressions.
 
 This ensures future Claude sessions (after compaction) have full context.
+
+**Hypothesis rule:** Before testing any theory about the bug's cause, write it down in the `### Hypotheses` table first with status `TESTING`. After testing, update the status to `CONFIRMED` or `REJECTED` and fill in the result. Never test a hypothesis without logging it. Never move on without updating the status. This prevents you from going in circles — after compaction, you won't remember what you already tried, but the table will tell you. If you find yourself forming a hypothesis that's already in the table, you're going in circles — stop and reassess.
 
 **Repeated rediscovery rule:** If you find yourself looking up, re-deriving, or re-confirming the same piece of information more than once during investigation (e.g., a config value, an API behavior, a file's role, a non-obvious code path), write it into `### Findings` in BUGS.md immediately. Information that had to be discovered twice will have to be discovered again after compaction — BUGS.md survives compaction, your memory does not. When in doubt, write it down.
 
