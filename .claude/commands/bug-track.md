@@ -119,12 +119,26 @@ This ensures future Claude sessions (after compaction) have full context.
 
 **Workarounds rule:** If you discover alternative ways to test, verify, or reproduce something (e.g., a manual CLI command that triggers the same code path, a way to mock a dependency, a debug flag that exposes state, a curl request that simulates a UI action), document it in `### Findings` immediately. Include the exact command or steps so they can be reused. These testing workarounds are hard-won knowledge that is easily lost to compaction. Future sessions must not waste time re-figuring out how to test the same thing.
 
-## Step 5: Mark fixed
+## Step 5: Verify and mark fixed
 
-Once the bug is confirmed fixed:
-1. Change `## Status: ACTIVE` to `## Status: FIXED`
-2. Add a `### Resolution` section explaining what fixed it
-3. After marking FIXED, **stop** actively working on the bug unless the user gives new instructions
+**DO NOT mark the bug as FIXED until you have rigorously verified the fix.** Being meticulous here is critical — a sloppy "it looks fixed" is worse than leaving it ACTIVE.
+
+Before changing the status to FIXED, you MUST complete ALL of the following:
+
+1. **Re-run the exact reproduction steps** from `### Reproduction` and confirm the bug no longer occurs. Document the output/result.
+2. **Run the project's relevant tests** (unit tests, integration tests, etc.) to confirm nothing is broken. If no automated tests exist for this area, manually test related functionality.
+3. **Check for regressions** — verify that the fix doesn't break adjacent behavior. Think about edge cases and related code paths.
+4. **Document your verification** — add a `### Verification` section to BUGS.md with:
+   - Exact commands/steps you ran to verify
+   - The output or observed behavior proving the fix works
+   - Any tests that passed/failed
+5. Only THEN change `## Status: ACTIVE` to `## Status: FIXED`
+6. Add a `### Resolution` section explaining what the root cause was and what fixed it
+7. After marking FIXED, **stop** actively working on the bug unless the user gives new instructions
+
+**If you cannot reproduce the original bug to begin with**, do NOT mark it as FIXED. Leave it ACTIVE and note what you tried in `### Findings`. Ask the user for guidance.
+
+**If verification fails**, do NOT mark it as FIXED. Update `### Findings` with what went wrong and continue investigating.
 
 ## Git rules
 
